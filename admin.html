@@ -2,6 +2,7 @@
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin Panel - Babul Union</title>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
@@ -9,41 +10,44 @@
 <style>
 body{font-family:Arial; background:#f0f2f5; padding:20px}
 .box{max-width:600px; margin:auto; background:#fff; padding:20px; border-radius:10px; box-shadow:0 0 10px #ccc}
-input,textarea,button{width:100%; padding:10px; margin:8px 0; border:1px solid #ccc; border-radius:5px}
-button{background:#007bff; color:#fff; border:none; cursor:pointer}
+input,textarea,button{width:100%; padding:12px; margin:8px 0; border:1px solid #ccc; border-radius:5px; font-size:16px}
+button{background:#007bff; color:#fff; border:none; cursor:pointer; font-weight:bold}
 button:hover{background:#0056b3}
-#logout{float:right; background:red}
+#logout{float:right; background:red; width:auto; padding:8px 15px}
+h2{text-align:center; color:#333}
 </style>
 </head>
 <body>
 
 <div class="box" id="login-box">
   <h2>Admin Login</h2>
-  <input type="email" id="email" placeholder="Email">
+  <input type="email" id="email" placeholder="Email" value="babul07@gmail.com">
   <input type="password" id="password" placeholder="Password">
   <button onclick="login()">Login</button>
-  <p id="error" style="color:red"></p>
+  <p id="error" style="color:red; text-align:center"></p>
 </div>
 
 <div class="box" id="admin-box" style="display:none">
   <button id="logout" onclick="logout()">Logout</button>
   <h2>নতুন পোস্ট যোগ করুন</h2>
-  <input type="text" id="title" placeholder="শিরোনাম">
-  <textarea id="desc" placeholder="বিবরণ" rows="5"></textarea>
+  <input type="text" id="title" placeholder="শিরোনাম লিখুন">
+  <textarea id="desc" placeholder="বিবরণ লিখুন" rows="6"></textarea>
   <button onclick="addPost()">পোস্ট করুন</button>
-  <p id="msg" style="color:green"></p>
+  <p id="msg" style="color:green; text-align:center"></p>
 </div>
 
 <script>
-// আপনার Firebase Config এখানে বসবে
+// Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIza...",
+  apiKey: "AIzaSyBV_XpVRx7fbIMBSDmcjc6BNxIoamQ7SoA",
   authDomain: "babul-union-7.firebaseapp.com",
   projectId: "babul-union-7",
-  storageBucket: "babul-union-7.appspot.com",
-  messagingSenderId: "...",
-  appId: "..."
+  storageBucket: "babul-union-7.firebasestorage.app",
+  messagingSenderId: "424653767943",
+  appId: "1:424653767943:web:696e371ded9477e04831a2"
 };
+
+// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
@@ -57,7 +61,7 @@ function login(){
     document.getElementById('login-box').style.display='none';
     document.getElementById('admin-box').style.display='block';
   })
-  .catch(err=>{document.getElementById('error').innerText=err.message})
+  .catch(err=>{document.getElementById('error').innerText="Email বা Password ভুল!"})
 }
 
 // Logout
@@ -67,12 +71,13 @@ function logout(){auth.signOut(); location.reload()}
 function addPost(){
   const title = document.getElementById('title').value;
   const desc = document.getElementById('desc').value;
+  if(title=='' || desc==''){alert("সব ঘর পূরণ করুন"); return;}
   db.collection("posts").add({
     title: title,
     description: desc,
     time: new Date()
   }).then(()=>{
-    document.getElementById('msg').innerText="পোস্ট সফলভাবে যোগ হয়েছে!";
+    document.getElementById('msg').innerText="✅ পোস্ট সফলভাবে যোগ হয়েছে!";
     document.getElementById('title').value='';
     document.getElementById('desc').value='';
   })
