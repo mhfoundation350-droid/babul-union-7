@@ -2,30 +2,37 @@
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
-<title>Babul Union 7 - Admin Panel</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel - Babul Union 7</title>
 <style>
-body{font-family:sans-serif;background:#f0f2f5;padding:20px}
-.container{max-width:600px;margin:auto;background:#fff;padding:20px;border-radius:8px}
-input,textarea{width:100%;padding:10px;margin:10px 0;border:1px solid #ddd;border-radius:4px}
-button{background:#1877f2;color:#fff;padding:10px 20px;border:none;border-radius:4px;cursor:pointer}
-.post{border:1px solid #ddd;padding:10px;margin:10px 0;border-radius:4px}
+body{font-family:'SolaimanLipi',sans-serif;background:#f0f2f5;padding:20px;margin:0}
+.container{max-width:800px;margin:auto;background:#fff;padding:25px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+h2{color:#1877f2;text-align:center}
+input{width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:6px;box-sizing:border-box;font-size:16px}
+button{background:#1877f2;color:#fff;padding:12px 18px;border:none;border-radius:6px;cursor:pointer;margin:5px;font-size:15px;font-weight:bold}
+button:hover{background:#166fe5}
+.del-btn{background:#dc3545}
+.edit-btn{background:#ffc107;color:#000}
+.ward-box{border:1px solid #ddd;padding:15px;margin:10px 0;border-radius:8px;background:#f9f9f9}
 </style>
 </head>
 <body>
 <div class="container">
-<h2>নতুন পোস্ট যোগ করুন</h2>
-<input type="text" id="title" placeholder="শিরোনাম লিখুন">
-<textarea id="desc" placeholder="বিবরণ লিখুন" rows="5"></textarea>
-<button onclick="addPost()">পোস্ট করুন</button>
-<h3>আপনার পোস্ট সমূহ</h3>
-<div id="posts">লোড হচ্ছে...</div>
+<h2>ওয়ার্ড প্রতিনিধি কন্ট্রোল প্যানেল</h2>
+
+<input type="text" id="wardNo" placeholder="ওয়ার্ড নং - যেমন: 1">
+<input type="text" id="name" placeholder="প্রতিনিধির নাম">
+<input type="tel" id="mobile" placeholder="মোবাইল নাম্বার - 01645444350">
+<button onclick="saveWard()">সেভ করুন</button>
+
+<h3 style="margin-top:30px;">সকল প্রতিনিধি</h3>
+<div id="wardList">লোড হচ্ছে...</div>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs, deleteDoc, updateDoc, doc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyBV_XpVRx7fbIMBSDmcjc6BNxIoamQ7SoA",
   authDomain: "babul-union-7.firebaseapp.com",
@@ -37,35 +44,60 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+let editingId = null;
 
-window.addPost = async function() {
-  const title = document.getElementById('title').value;
-  const desc = document.getElementById('desc').value;
-  if(title && desc){
-    await addDoc(collection(db, "posts"), {
-      title: title,
-      description: desc,
-      date: new Date()
-    });
-    document.getElementById('title').value = '';
-    document.getElementById('desc').value = '';
-    loadPosts();
-    alert('পোস্ট হয়ে গেছে!');
+window.saveWard = async function() {
+  const wardNo = document.getElementById('wardNo').value.trim();
+  const name = document.getElementById('name').value.trim();
+  const mobile = document.getElementById('mobile').value.trim();
+  if(!wardNo || !name || !mobile) return alert('সব ঘর পূরণ করুন');
+  
+  if(editingId){
+    await updateDoc(doc(db, "wards", editingId), {wardNo, name, mobile});
+    editingId = null;
+    alert('আপডেট হয়েছে');
   } else {
-    alert('শিরোনাম ও বিবরণ লিখুন');
+    await addDoc(collection(db, "wards"), {wardNo, name, mobile});
+    alert('যোগ হয়েছে');
+  }
+  document.getElementById('wardNo').value = '';
+  document.getElementById('name').value = '';
+  document.getElementById('mobile').value = '';
+  loadWards();
+}
+
+window.editWard = function(id, wardNo, name, mobile){
+  editingId = id;
+  document.getElementById('wardNo').value = wardNo;
+  document.getElementById('name').value = name;
+  document.getElementById('mobile').value = mobile;
+  window.scrollTo(0,0);
+}
+
+window.deleteWard = async function(id){
+  if(confirm('ডিলিট করতে চান?')){
+    await deleteDoc(doc(db, "wards", id));
+    loadWards();
   }
 }
 
-async function loadPosts() {
-  const q = query(collection(db, "posts"), orderBy("date", "desc"));
-  const querySnapshot = await getDocs(q);
-  const postsDiv = document.getElementById('posts');
-  postsDiv.innerHTML = '';
-  querySnapshot.forEach((doc) => {
-    postsDiv.innerHTML += `<div class="post"><h4>${doc.data().title}</h4><p>${doc.data().description}</p></div>`;
+async function loadWards() {
+  const q = query(collection(db, "wards"), orderBy("wardNo"));
+  const snap = await getDocs(q);
+  let html = '';
+  snap.forEach((d) => {
+    const data = d.data();
+    html += `<div class="ward-box">
+      <b>ওয়ার্ড ${data.wardNo}</b><br>
+      প্রতিনিধি: ${data.name}<br>
+      মোবাইল: ${data.mobile}<br>
+      <button class="edit-btn" onclick="editWard('${d.id}','${data.wardNo}','${data.name}','${data.mobile}')">Edit</button>
+      <button class="del-btn" onclick="deleteWard('${d.id}')">Delete</button>
+    </div>`;
   });
+  document.getElementById('wardList').innerHTML = html || 'কোনো প্রতিনিধি নেই';
 }
-loadPosts();
+loadWards();
 </script>
 </body>
 </html>
