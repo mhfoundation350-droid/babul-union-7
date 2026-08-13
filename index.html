@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>মোঃ বাবুল - ৭ নং হাজিরহাট ইউনিয়ন চেয়ারম্যান প্রার্থী</title>
+<title>মোহাম্মদ বাবুল - ৭ নং হাজিরহাট ইউনিয়ন চেয়ারম্যান প্রার্থী</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'SolaimanLipi',sans-serif;background:#f8f9fa;color:#333}
@@ -11,8 +11,8 @@ a{text-decoration:none}
 .container{max-width:1200px;margin:auto;padding:0 15px}
 
 /* Hero */
-.hero{background:linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),url('https://i.imgur.com/8Km9tLL.jpg') center/cover; color:#fff;text-align:center;padding:80px 20px}
-.hero img{width:180px;height:180px;border-radius:50%;border:5px solid #fff;margin-bottom:20px}
+.hero{background:linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),url('https://i.imgur.com/8Km9tLL.jpg') center/cover; color:#fff;text-align:center;padding:80px 20px;background-attachment:fixed}
+.hero img{width:180px;height:180px;border-radius:50%;border:5px solid #fff;margin-bottom:20px;object-fit:cover}
 .hero h1{font-size:32px;margin-bottom:10px}
 .hero h2{font-size:20px;color:#ffd700;margin-bottom:20px}
 .hero-btns{display:flex;gap:15px;justify-content:center;flex-wrap:wrap}
@@ -34,7 +34,7 @@ a{text-decoration:none}
 .progress{height:25px;background:#28a745;text-align:center;color:#fff;line-height:25px}
 
 /* FAQ */
-.faq-item{background:#fff;padding:15px;margin:10px 0;border-radius:8px;cursor:pointer}
+.faq-item{background:#fff;padding:15px;margin:10px 0;border-radius:8px}
 
 /* Contact */
 .contact{background:#2e7d32;color:#fff;padding:40px 20px;text-align:center}
@@ -46,10 +46,10 @@ a{text-decoration:none}
 <body>
 
 <!-- 1. HERO SECTION -->
-<section class="hero">
-  <img src="https://via.placeholder.com/180" alt="মোঃ বাবুল">
-  <h1>মোঃ বাবুল</h1>
-  <h2>"উন্নয়ন, সততা ও জনসেবার অঙ্গীকার"</h2>
+<section class="hero" id="heroSection">
+  <img id="heroLogo" src="https://via.placeholder.com/180" alt="মোহাম্মদ বাবুল">
+  <h1 id="heroName">মোহাম্মদ বাবুল</h1>
+  <h2 id="heroSlogan">"উন্নয়ন, সততা ও জনসেবার অঙ্গীকার"</h2>
   <p>৭ নং হাজিরহাট ইউনিয়ন পরিষদ চেয়ারম্যান প্রার্থী</p>
   <div class="hero-btns">
     <a href="tel:01728665896" class="btn btn-primary">📞 সরাসরি যোগাযোগ</a>
@@ -136,7 +136,7 @@ a{text-decoration:none}
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, getDocs, query, orderBy, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBV_XpVRx7fbIMBSDmcjc6BNxIoamQ7SoA",
@@ -149,6 +149,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+// ওয়ার্ড লোড
 async function loadWardsUser(){
   const q = query(collection(db, "wards"), orderBy("wardNo"));
   const snap = await getDocs(q);
@@ -170,7 +171,21 @@ async function loadWardsUser(){
   });
   document.getElementById('wardsContainer').innerHTML = html || '<p>এখনো প্রতিনিধি যোগ হয়নি</p>';
 }
+
+// Hero Settings লোড
+async function loadSettings(){
+  const snap = await getDoc(doc(db, "settings", "hero"));
+  if(snap.exists()){
+    const data = snap.data();
+    if(data.logoUrl) document.getElementById('heroLogo').src = data.logoUrl;
+    if(data.name) document.getElementById('heroName').innerText = data.name;
+    if(data.slogan) document.getElementById('heroSlogan').innerText = `"${data.slogan}"`;
+    if(data.bannerUrl) document.getElementById('heroSection').style.backgroundImage = `linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),url('${data.bannerUrl}')`;
+  }
+}
+
 loadWardsUser();
+loadSettings();
 </script>
 
 </body>
