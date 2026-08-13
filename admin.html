@@ -20,6 +20,7 @@ img.banner-preview{width:100%;height:120px;object-fit:cover;border-radius:6px;ma
 .ward-box{border:1px solid #ddd;padding:10px;margin:8px 0;border-radius:6px;background:#f9f9f9;font-size:14px}
 #status{padding:8px;margin:8px 0;border-radius:5px;display:none;font-size:14px}
 .success{background:#d4edda;color:#155724}
+input[type="file"]{border:none;padding:0}
 </style>
 </head>
 <body>
@@ -32,14 +33,13 @@ img.banner-preview{width:100%;height:120px;object-fit:cover;border-radius:6px;ma
   <h3>🏆 Hero Section সেটিংস</h3>
   <input type="text" id="candidateName" placeholder="প্রার্থীর নাম - মোহাম্মদ বাবুল">
   <input type="text" id="slogan" placeholder="স্লোগান">
-  
-  <label><b>লোগো ছবির লিংক:</b></label>
-  <small>imgur.com এ আপলোড করে Direct Link এখানে দিন</small>
-  <input type="text" id="logoUrl" placeholder="https://i.imgur.com/xxx.jpg">
+
+  <label><b>লোগো ছবি Upload করুন:</b></label>
+  <input type="file" id="logoUpload" accept="image/*">
   <img id="logoPreview" class="preview" src="" style="display:none">
 
-  <label><b>Banner ছবির লিংক:</b></label>
-  <input type="text" id="bannerUrl" placeholder="https://i.imgur.com/xxx.jpg">
+  <label><b>Banner ছবি Upload করুন:</b></label>
+  <input type="file" id="bannerUpload" accept="image/*">
   <img id="bannerPreview" class="banner-preview" src="" style="display:none">
 
   <button onclick="saveSettings()">সেভ করুন</button>
@@ -83,19 +83,24 @@ function showStatus(msg){
   setTimeout(()=> el.style.display='none', 3000);
 }
 
-// Link preview
-document.getElementById('logoUrl').oninput = e => {
-  if(e.target.value){
-    document.getElementById('logoPreview').src = e.target.value;
-    document.getElementById('logoPreview').style.display = 'block';
-  }
+// === BASE64 UPLOAD SYSTEM ===
+function handleFileUpload(inputId, previewId, storageKey){
+  document.getElementById(inputId).addEventListener('change', function(e){
+    const file = e.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = function(event){
+      const base64 = event.target.result;
+      localStorage.setItem(storageKey, base64); // ব্রাউজারে সেভ
+      document.getElementById(previewId).src = base64;
+      document.getElementById(previewId).style.display = 'block';
+      showStatus('ছবি সিলেক্ট হয়েছে। এখন সেভ করুন বাটন চাপেন');
+    }
+    reader.readAsDataURL(file);
+  });
 }
-document.getElementById('bannerUrl').oninput = e => {
-  if(e.target.value){
-    document.getElementById('bannerPreview').src = e.target.value;
-    document.getElementById('bannerPreview').style.display = 'block';
-  }
-}
+handleFileUpload('logoUpload', 'logoPreview', 'site_logo');
+handleFileUpload('bannerUpload', 'bannerPreview', 'site_banner');
 
 // আগের সেটিংস লোড
 async function loadCurrentSettings(){
@@ -104,20 +109,28 @@ async function loadCurrentSettings(){
     const data = snap.data();
     document.getElementById('candidateName').value = data.name || '';
     document.getElementById('slogan').value = data.slogan || '';
-    document.getElementById('logoUrl').value = data.logoUrl || '';
-    document.getElementById('bannerUrl').value = data.bannerUrl || '';
-    if(data.logoUrl) document.getElementById('logoPreview').style.display = 'block';
-    if(data.bannerUrl) document.getElementById('bannerPreview').style.display = 'block';
+
+    // localStorage থেকে ছবি লোড
+    const savedLogo = localStorage.getItem('site_logo');
+    const savedBanner = localStorage.getItem('site_banner');
+    if(savedLogo){
+      document.getElementById('logoPreview').src = savedLogo;
+      document.getElementById('logoPreview').style.display = 'block';
+    }
+    if(savedBanner){
+      document.getElementById('bannerPreview').src = savedBanner;
+      document.getElementById('bannerPreview').style.display = 'block';
+    }
   }
 }
 loadCurrentSettings();
 
-// সেটিংস সেভ
+// সেটিংস সেভ - এখন Firebase এ base64 সেভ হবে
 window.saveSettings = async function() {
   const name = document.getElementById('candidateName').value;
   const slogan = document.getElementById('slogan').value;
-  const logoUrl = document.getElementById('logoUrl').value;
-  const bannerUrl = document.getElementById('bannerUrl').value;
+  const logoUrl = localStorage.getItem('site_logo') || ''; // base64
+  const bannerUrl = localStorage.getItem('site_banner') || ''; // base64
 
   await setDoc(doc(db, "settings", "hero"), {name, slogan, logoUrl, bannerUrl});
   showStatus('সেটিংস সফলভাবে সেভ হয়েছে ✅');
