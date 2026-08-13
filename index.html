@@ -10,56 +10,63 @@ body{font-family:'SolaimanLipi',sans-serif;background:#f8f9fa;color:#333;font-si
 a{text-decoration:none}
 .container{max-width:1000px;margin:auto;padding:0 12px}
 
-/* Hero - 30% ছোট */
+/* Hero */
 .hero{background:linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)) center/cover; color:#fff;text-align:center;padding:50px 15px;background-attachment:fixed}
 .hero img{width:120px;height:120px;border-radius:50%;border:4px solid #fff;margin-bottom:12px;object-fit:cover}
 .hero h1{font-size:22px;margin-bottom:6px}
 .hero h2{font-size:15px;color:#ffd700;margin-bottom:12px}
 .hero-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-.btn{padding:8px 16px;border-radius:6px;font-weight:bold;font-size:13px;cursor:pointer}
+.btn{padding:10px 18px;border-radius:25px;font-weight:bold;font-size:13px;cursor:pointer;border:none;transition:all 0.2s;box-shadow:0 3px 8px rgba(0,0,0,0.15)}
+.btn:active{transform:scale(0.95)}
 .btn-primary{background:#28a745;color:#fff}
-.btn-white{background:#fff;color:#000;border:2px solid #fff}
+.btn-whatsapp{background:#25D366;color:#fff;border:2px solid #fff} /* WhatsApp Green Only */
 
-/* Facebook Box */
-.social-box{background:#1877F2;color:#fff;padding:12px;border-radius:8px;text-align:center;margin:15px auto 0 auto;max-width:400px}
-.social-box a{color:#fff;font-weight:bold;font-size:14px;display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none}
+/* Facebook Box - Unique */
+.social-box{background:linear-gradient(135deg, #1877F2, #0A66FF);color:#fff;padding:12px;border-radius:25px;text-align:center;margin:15px auto 0 auto;max-width:400px;box-shadow:0 4px 12px rgba(24,119,242,0.3);transition:0.2s;cursor:pointer}
+.social-box:active{transform:scale(0.96)}
 
-/* Sections - 50% ছোট */
+/* Sections */
 .section{padding:25px 0}
 .section-title{text-align:center;font-size:20px;color:#2e7d32;margin-bottom:18px}
 
-/* Grid Cards - 50% ছোট */
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
-.card{background:#fff;padding:10px 12px;border-radius:8px;box-shadow:0 2px 5px rgba(0,0,0,0.08);border-top:3px solid #2e7d32;cursor:pointer;transition:0.2s;color:#333;display:block}
-.card:hover{transform:translateY(-2px)}
+/* Grid Cards - Unique Click Effect */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
+.card{background:#fff;padding:12px;border-radius:12px;box-shadow:0 2px 5px rgba(0,0,0,0.08);border-top:3px solid #2e7d32;cursor:pointer;transition:all 0.2s;color:#333;display:block}
+.card:hover{transform:translateY(-3px);box-shadow:0 4px 10px rgba(46,125,50,0.15)}
+.card:active{transform:scale(0.95);box-shadow:0 1px 3px rgba(0,0,0,0.1)}
 .card h3{color:#2e7d32;margin-bottom:5px;font-size:15px}
 .card p{font-size:12.5px;color:#555}
+
+/* Accordion - Unique */
+.accordion-item{background:#fff;margin:10px 0;border-radius:12px;box-shadow:0 2px 5px rgba(0,0,0,0.08);border-top:3px solid #2e7d32;overflow:hidden}
+.accordion-header{padding:14px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-size:14px;font-weight:bold;color:#2e7d32;transition:0.2s}
+.accordion-header:active{background:#f1f8e9}
+.accordion-header.arrow{transition:0.3s;font-size:16px}
+.accordion-header.active.arrow{transform:rotate(180deg)}
+.accordion-content{max-height:0;overflow:hidden;transition:max-height 0.3s ease-out}
+.accordion-content.show{max-height:1000px;padding:0 14px 14px 14px}
+.list-item{background:#f1f8e9;padding:10px;border-radius:8px;margin:6px 0;display:flex;align-items:center;gap:8px;border-left:3px solid #28a745;font-size:12.5px;transition:0.2s}
+.list-item:active{background:#e8f5e9;transform:scale(0.98)}
 
 /* Progress Bar */
 .progress-bar{background:#e0e0e0;border-radius:15px;overflow:hidden;margin:8px 0}
 .progress{height:18px;background:#28a745;text-align:center;color:#fff;line-height:18px;font-size:12px}
 
 /* FAQ */
-.faq-item{background:#fff;padding:10px;margin:8px 0;border-radius:6px;font-size:13px}
-.faq-item b{font-size:14px}
+.faq-item{background:#fff;padding:10px;margin:8px 0;border-radius:8px;font-size:13px;cursor:pointer;transition:0.2s}
+.faq-item:active{background:#f1f8e9;transform:scale(0.99)}
 
 /* Contact */
 .contact{background:#2e7d32;color:#fff;padding:25px 15px;text-align:center}
 .contact a{color:#ffd700;font-size:15px;font-weight:bold}
 
-/* ACCORDION CSS - 50% ছোট */
-.accordion-item{background:#fff;margin:10px 0;border-radius:8px;box-shadow:0 2px 5px rgba(0,0,0,0.08);border-top:3px solid #2e7d32}
-.accordion-header{padding:12px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-size:14px;font-weight:bold;color:#2e7d32}
-.accordion-header.arrow{transition:0.3s;font-size:16px}
-.accordion-header.active.arrow{transform:rotate(180deg)}
-.accordion-content{max-height:0;overflow:hidden;transition:max-height 0.3s ease-out}
-.accordion-content.show{max-height:1000px;padding:0 12px 12px 12px}
-.list-item{background:#f1f8e9;padding:8px;border-radius:5px;margin:6px 0;display:flex;align-items:center;gap:8px;border-left:3px solid #28a745;font-size:12.5px}
-
 @media(max-width:768px){.hero h1{font-size:20px}}
 </style>
 </head>
 <body>
+
+<!-- Click Sound -->
+<audio id="clickSound" src="https://cdn.freesound.org/previews/270/270404_5123851-lq.mp3"></audio>
 
 <!-- 1. HERO SECTION -->
 <section class="hero" id="heroSection">
@@ -69,19 +76,19 @@ a{text-decoration:none}
   <p style="font-size:13px">৭ নং হাজিরহাট ইউনিয়ন পরিষদ চেয়ারম্যান প্রার্থী</p>
 
   <div class="hero-btns">
-    <a href="tel:01728665896" class="btn btn-primary">📞 সরাসরি যোগাযোগ</a>
-    <a href="https://wa.me/8801728665896" target="_blank" class="btn btn-white">💬 প্রচারণায় যুক্ত হোন</a>
+    <a href="tel:01728665896" class="btn btn-primary" onclick="playSound()">📞 সরাসরি যোগাযোগ</a>
+    <a href="https://wa.me/8801728665896" target="_blank" class="btn btn-whatsapp" onclick="playSound()">💬 হোয়াটসঅ্যাপে মেসেজ করুন</a>
   </div>
 
-  <!-- Facebook বক্স নতুন -->
-  <div class="social-box">
+  <!-- Facebook বক্স -->
+  <div class="social-box" onclick="playSound()">
     <a href="https://www.facebook.com/share/1B6X6Ek4Qj/" target="_blank">
       📘 আমাদের Facebook পেজে যুক্ত হোন
     </a>
   </div>
 </section>
 
-<!-- 3. WARD LIST - আগে নিয়ে আসলাম -->
+<!-- 3. WARD LIST -->
 <section class="section" style="background:#fff">
   <div class="container">
     <h2 class="section-title">🏘️ ইউনিয়নের ৯টি ওয়ার্ড - প্রতিনিধি</h2>
@@ -89,24 +96,24 @@ a{text-decoration:none}
   </div>
 </section>
 
-<!-- 2. ABOUT UNION - ACCORDION - এখন নিচে -->
+<!-- 2. ABOUT UNION - ACCORDION -->
 <section class="section container">
   <div class="accordion-item">
-    <div class="accordion-header" onclick="toggleAccordion(this)">
+    <div class="accordion-header" onclick="toggleAccordion(this);playSound()">
       <span>🗺️ ৭ নং হাজিরহাট ইউনিয়ন সম্পর্কে</span>
       <span class="arrow">▼</span>
     </div>
     <div class="accordion-content">
       <p style="margin-bottom:10px;font-size:13px">৭ নং হাজিরহাট ইউনিয়ন পরিষদ কমলনগর উপজেলা, লক্ষ্মীপুর জেলার অন্যতম গুরুত্বপূর্ণ ও প্রাণকেন্দ্র।</p>
-      <div class="list-item">✅ কমলনগর উপজেলা পরিষদ</div>
-      <div class="list-item">✅ উপজেলা প্রশাসনিক কার্যালয়</div>
-      <div class="list-item">✅ কমলনগর থানা</div>
-      <div class="list-item">✅ সরকারি কলেজ</div>
-      <div class="list-item">✅ মডেল মসজিদ</div>
-      <div class="list-item">✅ ফায়ার সার্ভিস ও সিভিল ডিফেন্স</div>
-      <div class="list-item">✅ পল্লী বিদ্যুৎ অফিস</div>
-      <div class="list-item">✅ উপজেলা স্বাস্থ্যসেবা কেন্দ্র</div>
-      <div class="list-item">✅ হাজিরহাট বাজার</div>
+      <div class="list-item" onclick="playSound()">✅ কমলনগর উপজেলা পরিষদ</div>
+      <div class="list-item" onclick="playSound()">✅ উপজেলা প্রশাসনিক কার্যালয়</div>
+      <div class="list-item" onclick="playSound()">✅ কমলনগর থানা</div>
+      <div class="list-item" onclick="playSound()">✅ সরকারি কলেজ</div>
+      <div class="list-item" onclick="playSound()">✅ মডেল মসজিদ</div>
+      <div class="list-item" onclick="playSound()">✅ ফায়ার সার্ভিস ও সিভিল ডিফেন্স</div>
+      <div class="list-item" onclick="playSound()">✅ পল্লী বিদ্যুৎ অফিস</div>
+      <div class="list-item" onclick="playSound()">✅ উপজেলা স্বাস্থ্যসেবা কেন্দ্র</div>
+      <div class="list-item" onclick="playSound()">✅ হাজিরহাট বাজার</div>
     </div>
   </div>
 </section>
@@ -114,21 +121,21 @@ a{text-decoration:none}
 <!-- 4. VISION 2030 - ACCORDION -->
 <section class="section container">
   <div class="accordion-item">
-    <div class="accordion-header" onclick="toggleAccordion(this)">
+    <div class="accordion-header" onclick="toggleAccordion(this);playSound()">
       <span>📊 উন্নয়ন পরিকল্পনা - Vision 2030</span>
       <span class="arrow">▼</span>
     </div>
     <div class="accordion-content">
-      <div class="list-item">✅ শতভাগ রাস্তা উন্নয়ন</div>
-      <div class="list-item">✅ শতভাগ ড্রেনেজ ব্যবস্থা</div>
-      <div class="list-item">✅ নিরাপদ সুপেয় পানি</div>
-      <div class="list-item">✅ যুবকদের কর্মসংস্থান</div>
-      <div class="list-item">✅ নারীর ক্ষমতায়ন</div>
-      <div class="list-item">✅ ডিজিটাল ইউনিয়ন</div>
-      <div class="list-item">✅ আধুনিক কৃষি</div>
-      <div class="list-item">✅ স্বাস্থ্যসেবা সম্প্রসারণ</div>
-      <div class="list-item">✅ শিক্ষা উন্নয়ন</div>
-      <div class="list-item">✅ দুর্নীতিমুক্ত ইউনিয়ন পরিষদ</div>
+      <div class="list-item" onclick="playSound()">✅ শতভাগ রাস্তা উন্নয়ন</div>
+      <div class="list-item" onclick="playSound()">✅ শতভাগ ড্রেনেজ ব্যবস্থা</div>
+      <div class="list-item" onclick="playSound()">✅ নিরাপদ সুপেয় পানি</div>
+      <div class="list-item" onclick="playSound()">✅ যুবকদের কর্মসংস্থান</div>
+      <div class="list-item" onclick="playSound()">✅ নারীর ক্ষমতায়ন</div>
+      <div class="list-item" onclick="playSound()">✅ ডিজিটাল ইউনিয়ন</div>
+      <div class="list-item" onclick="playSound()">✅ আধুনিক কৃষি</div>
+      <div class="list-item" onclick="playSound()">✅ স্বাস্থ্যসেবা সম্প্রসারণ</div>
+      <div class="list-item" onclick="playSound()">✅ শিক্ষা উন্নয়ন</div>
+      <div class="list-item" onclick="playSound()">✅ দুর্নীতিমুক্ত ইউনিয়ন পরিষদ</div>
     </div>
   </div>
 </section>
@@ -147,24 +154,24 @@ a{text-decoration:none}
 <!-- 6. TESTIMONIALS -->
 <section class="section container">
   <h2 class="section-title">❤️ জনগণের মতামত</h2>
-  <div class="card">"বাবুল ভাই সবসময় মানুষের পাশে থাকেন।"</div>
-  <div class="card">"সৎ ও যোগ্য প্রার্থী।"</div>
+  <div class="card" onclick="playSound()">"বাবুল ভাই সবসময় মানুষের পাশে থাকেন।"</div>
+  <div class="card" onclick="playSound()">"সৎ ও যোগ্য প্রার্থী।"</div>
 </section>
 
 <!-- 7. FAQ -->
 <section class="section" style="background:#fff">
   <div class="container">
     <h2 class="section-title">❓ সাধারণ প্রশ্ন</h2>
-    <div class="faq-item"><b>বাবুল ভাই কে?</b><p>তিনি ৭ নং হাজিরহাট ইউনিয়নের চেয়ারম্যান প্রার্থী।</p></div>
-    <div class="faq-item"><b>কেন তাকে ভোট দেব?</b><p>সততা, উন্নয়ন ও জনসেবার জন্য।</p></div>
+    <div class="faq-item" onclick="playSound()"><b>বাবুল ভাই কে?</b><p>তিনি ৭ নং হাজিরহাট ইউনিয়নের চেয়ারম্যান প্রার্থী।</p></div>
+    <div class="faq-item" onclick="playSound()"><b>কেন তাকে ভোট দেব?</b><p>সততা, উন্নয়ন ও জনসেবার জন্য।</p></div>
   </div>
 </section>
 
 <!-- 8. CONTACT -->
 <section id="contact" class="contact">
   <h2 class="section-title" style="color:#fff">📞 যোগাযোগ</h2>
-  <p>মোবাইল: <a href="tel:01728665896">01728665896</a></p>
-  <p>WhatsApp: <a href="https://wa.me/8801728665896">01728665896</a></p>
+  <p>মোবাইল: <a href="tel:01728665896" onclick="playSound()">01728665896</a></p>
+  <p>WhatsApp: <a href="https://wa.me/8801728665896" onclick="playSound()">01728665896</a></p>
   <p style="font-size:13px">ঠিকানা: ৭ নং হাজিরহাট ইউনিয়ন পরিষদ, কমলনগর, লক্ষ্মীপুর</p>
 </section>
 
@@ -182,6 +189,13 @@ const firebaseConfig = {
 };
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+
+// Click Sound Function
+window.playSound = function(){
+  const sound = document.getElementById('clickSound');
+  sound.currentTime = 0;
+  sound.play().catch(e=>{});
+}
 
 // ACCORDION FUNCTION
 window.toggleAccordion = function(header){
@@ -225,7 +239,7 @@ async function loadWardList(){
   for(let i = 1; i <= 9; i++){
     const wardData = groupedWards[i];
     if(wardData && wardData.length > 0){
-      html += `<a href="ward.html?ward=${i}" class="card">
+      html += `<a href="ward.html?ward=${i}" class="card" onclick="playSound()">
         <h3>ওয়ার্ড ${i}</h3>
         <p>${wardData.length} জন প্রতিনিধি | বিস্তারিত দেখুন →</p>
       </a>`;
