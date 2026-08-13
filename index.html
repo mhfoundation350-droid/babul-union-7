@@ -56,9 +56,15 @@ a{text-decoration:none}
 .faq-item{background:#fff;padding:10px;margin:8px 0;border-radius:8px;font-size:13px;cursor:pointer;transition:0.2s}
 .faq-item:active{background:#f1f8e9;transform:scale(0.99)}
 
-/* Contact */
-.contact{background:#2e7d32;color:#fff;padding:25px 15px;text-align:center}
-.contact a{color:#ffd700;font-size:15px;font-weight:bold}
+/* Contact - NEW UNIQUE DESIGN */
+.contact{background:linear-gradient(135deg, #2e7d32, #1b5e20);color:#fff;padding:30px 15px;text-align:center}
+.contact-box{background:rgba(255,255,255,0.1);padding:20px;border-radius:15px;backdrop-filter:blur(5px);border:1px solid rgba(255,255,255,0.2);max-width:500px;margin:auto}
+.contact-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:18px 0}
+.contact-btn{display:flex;align-items:center;gap:10px;padding:14px 18px;border-radius:12px;font-size:13px;font-weight:bold;text-decoration:none;transition:all 0.2s;box-shadow:0 4px 10px rgba(0,0,0,0.25);flex:1;min-width:160px;justify-content:center}
+.contact-btn:active{transform:scale(0.95)}
+.contact-btn.icon{font-size:22px}
+.call-btn{background:#fff;color:#2e7d32}
+.wa-btn{background:#25D366;color:#fff} /* WhatsApp Green */
 
 @media(max-width:768px){.hero h1{font-size:20px}}
 </style>
@@ -167,12 +173,33 @@ a{text-decoration:none}
   </div>
 </section>
 
-<!-- 8. CONTACT -->
+<!-- 8. CONTACT - NEW DESIGN -->
 <section id="contact" class="contact">
-  <h2 class="section-title" style="color:#fff">📞 যোগাযোগ</h2>
-  <p>মোবাইল: <a href="tel:01728665896" onclick="playSound()">01728665896</a></p>
-  <p>WhatsApp: <a href="https://wa.me/8801728665896" onclick="playSound()">01728665896</a></p>
-  <p style="font-size:13px">ঠিকানা: ৭ নং হাজিরহাট ইউনিয়ন পরিষদ, কমলনগর, লক্ষ্মীপুর</p>
+  <div class="container">
+    <h2 class="section-title" style="color:#fff; margin-bottom:20px">📞 যোগাযোগ</h2>
+
+    <div class="contact-box">
+      <p style="font-size:13px;margin-bottom:15px;opacity:0.9">যেকোনো প্রয়োজনে সরাসরি যোগাযোগ করুন</p>
+
+      <div class="contact-btns">
+        <!-- Call Button -->
+        <a href="tel:01728665896" class="contact-btn call-btn" onclick="playSound()">
+          <span class="icon">📞</span>
+          <span>কল করুন<br><b>01728665896</b></span>
+        </a>
+
+        <!-- WhatsApp Button -->
+        <a href="https://wa.me/8801728665896" target="_blank" class="contact-btn wa-btn" onclick="playSound()">
+          <span class="icon">💬</span>
+          <span>WhatsApp<br><b>01728665896</b></span>
+        </a>
+      </div>
+
+      <p style="font-size:12.5px;margin-top:15px;opacity:0.9">
+        ঠিকানা: ৭ নং হাজিরহাট ইউনিয়ন পরিষদ, কমলনগর, লক্ষ্মীপুর
+      </p>
+    </div>
+  </div>
 </section>
 
 <script type="module">
