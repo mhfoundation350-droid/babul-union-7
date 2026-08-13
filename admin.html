@@ -5,48 +5,53 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin Panel - Babul Union 7</title>
 <style>
-body{font-family:'SolaimanLipi',sans-serif;background:#f0f2f5;padding:20px;margin:0}
-.container{max-width:900px;margin:auto;background:#fff;padding:25px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
-h2{color:#1877f2;text-align:center}
-input{width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:6px;box-sizing:border-box;font-size:16px}
-button{background:#1877f2;color:#fff;padding:12px 18px;border:none;border-radius:6px;cursor:pointer;margin:5px;font-size:15px;font-weight:bold}
+body{font-family:'SolaimanLipi',sans-serif;background:#f0f2f5;padding:15px;margin:0}
+.container{max-width:800px;margin:auto;background:#fff;padding:15px;border-radius:8px;box-shadow:0 2px 6px rgba(0,0,0,0.1)}
+h2{color:#1877f2;text-align:center;font-size:22px;margin-bottom:15px}
+input{width:100%;padding:8px;margin:6px 0;border:1px solid #ddd;border-radius:5px;box-sizing:border-box;font-size:14px}
+button{background:#1877f2;color:#fff;padding:8px 14px;border:none;border-radius:5px;cursor:pointer;margin:4px;font-size:14px;font-weight:bold}
 button:hover{background:#166fe5}
 .del-btn{background:#dc3545}
 .edit-btn{background:#ffc107;color:#000}
-.section{border:2px solid #1877f2;padding:20px;margin:25px 0;border-radius:10px}
-.section h3{margin-top:0;color:#2e7d32}
-img.preview{width:120px;height:120px;border-radius:50%;object-fit:cover;border:4px solid #2e7d32;margin:10px 0}
-img.banner-preview{width:100%;height:200px;object-fit:cover;border-radius:8px;margin:10px 0}
+.section{border:1px solid #1877f2;padding:12px;margin:15px 0;border-radius:8px}
+.section h3{margin:0 0 10px 0;color:#2e7d32;font-size:16px}
+img.preview{width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid #2e7d32;margin:8px 0}
+img.banner-preview{width:100%;height:120px;object-fit:cover;border-radius:6px;margin:8px 0}
+.ward-box{border:1px solid #ddd;padding:10px;margin:8px 0;border-radius:6px;background:#f9f9f9;font-size:14px}
+#status{padding:8px;margin:8px 0;border-radius:5px;display:none;font-size:14px}
+.success{background:#d4edda;color:#155724}
+.error{background:#f8d7da;color:#721c24}
 </style>
 </head>
 <body>
 <div class="container">
 <h2>ওয়েবসাইট কন্ট্রোল প্যানেল</h2>
+<div id="status"></div>
 
 <!-- 1. HERO SETTINGS -->
 <div class="section">
   <h3>🏆 Hero Section সেটিংস</h3>
-  <input type="text" id="candidateName" placeholder="প্রার্থীর নাম - মোঃ বাবুল">
-  <input type="text" id="slogan" placeholder="স্লোগান - উন্নয়ন, সততা ও জনসেবার অঙ্গীকার">
-  <label><b>লোগো/প্রার্থীর ছবি:</b></label>
+  <input type="text" id="candidateName" placeholder="প্রার্থীর নাম - মোহাম্মদ বাবুল">
+  <input type="text" id="slogan" placeholder="স্লোগান">
+  <label><b>লোগো/ছবি:</b></label>
   <input type="file" id="logoUpload" accept="image/*">
   <img id="logoPreview" class="preview" src="" style="display:none">
 
-  <label><b>Hero Banner Background:</b></label>
+  <label><b>Banner:</b></label>
   <input type="file" id="bannerUpload" accept="image/*">
   <img id="bannerPreview" class="banner-preview" src="" style="display:none">
 
-  <button onclick="saveSettings()">সেটিংস সেভ করুন</button>
+  <button onclick="saveSettings()">সেভ করুন</button>
 </div>
 
 <!-- 2. WARD REPRESENTATIVES -->
 <div class="section">
   <h3>🏘️ ওয়ার্ড প্রতিনিধি</h3>
-  <input type="text" id="wardNo" placeholder="ওয়ার্ড নং - যেমন: 1">
+  <input type="text" id="wardNo" placeholder="ওয়ার্ড নং">
   <input type="text" id="name" placeholder="প্রতিনিধির নাম">
-  <input type="tel" id="mobile" placeholder="মোবাইল নাম্বার - 01645444350">
-  <button onclick="saveWard()">সেভ করুন</button>
-  <h3 style="margin-top:30px;">সকল প্রতিনিধি</h3>
+  <input type="tel" id="mobile" placeholder="মোবাইল">
+  <button onclick="saveWard()">সেভ</button>
+  <h3 style="margin-top:15px;">সকল প্রতিনিধি</h3>
   <div id="wardList">লোড হচ্ছে...</div>
 </div>
 
@@ -70,41 +75,80 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const storage = getStorage(app);
 let editingId = null;
+let currentSettings = {};
+
+function showStatus(msg, type){
+  const el = document.getElementById('status');
+  el.className = type;
+  el.innerText = msg;
+  el.style.display = 'block';
+  setTimeout(()=> el.style.display='none', 3000);
+}
 
 // Preview
 document.getElementById('logoUpload').onchange = e => {
   const file = e.target.files[0];
-  document.getElementById('logoPreview').src = URL.createObjectURL(file);
-  document.getElementById('logoPreview').style.display = 'block';
+  if(file){
+    document.getElementById('logoPreview').src = URL.createObjectURL(file);
+    document.getElementById('logoPreview').style.display = 'block';
+  }
 }
 document.getElementById('bannerUpload').onchange = e => {
   const file = e.target.files[0];
-  document.getElementById('bannerPreview').src = URL.createObjectURL(file);
-  document.getElementById('bannerPreview').style.display = 'block';
+  if(file){
+    document.getElementById('bannerPreview').src = URL.createObjectURL(file);
+    document.getElementById('bannerPreview').style.display = 'block';
+  }
 }
+
+// আগের সেটিংস লোড
+async function loadCurrentSettings(){
+  const snap = await getDoc(doc(db, "settings", "hero"));
+  if(snap.exists()){
+    currentSettings = snap.data();
+    document.getElementById('candidateName').value = currentSettings.name || '';
+    document.getElementById('slogan').value = currentSettings.slogan || '';
+    if(currentSettings.logoUrl) {
+      document.getElementById('logoPreview').src = currentSettings.logoUrl;
+      document.getElementById('logoPreview').style.display = 'block';
+    }
+    if(currentSettings.bannerUrl) {
+      document.getElementById('bannerPreview').src = currentSettings.bannerUrl;
+      document.getElementById('bannerPreview').style.display = 'block';
+    }
+  }
+}
+loadCurrentSettings();
 
 // সেটিংস সেভ
 window.saveSettings = async function() {
-  const name = document.getElementById('candidateName').value;
-  const slogan = document.getElementById('slogan').value;
-  const logoFile = document.getElementById('logoUpload').files[0];
-  const bannerFile = document.getElementById('bannerUpload').files[0];
+  try{
+    const name = document.getElementById('candidateName').value;
+    const slogan = document.getElementById('slogan').value;
+    const logoFile = document.getElementById('logoUpload').files[0];
+    const bannerFile = document.getElementById('bannerUpload').files[0];
 
-  let logoUrl = "", bannerUrl = "";
+    let logoUrl = currentSettings.logoUrl || "";
+    let bannerUrl = currentSettings.bannerUrl || "";
 
-  if(logoFile){
-    const storageRef = ref(storage, 'settings/logo_' + Date.now() + '.jpg');
-    const snap = await uploadBytes(storageRef, logoFile);
-    logoUrl = await getDownloadURL(snap.ref);
+    if(logoFile){
+      const storageRef = ref(storage, 'settings/logo_' + Date.now() + '.jpg');
+      const snap = await uploadBytes(storageRef, logoFile);
+      logoUrl = await getDownloadURL(snap.ref);
+    }
+    if(bannerFile){
+      const storageRef = ref(storage, 'settings/banner_' + Date.now() + '.jpg');
+      const snap = await uploadBytes(storageRef, bannerFile);
+      bannerUrl = await getDownloadURL(snap.ref);
+    }
+
+    await setDoc(doc(db, "settings", "hero"), {name, slogan, logoUrl, bannerUrl});
+    currentSettings = {name, slogan, logoUrl, bannerUrl};
+    showStatus('সেটিংস সফলভাবে সেভ হয়েছে ✅', 'success');
+  }catch(err){
+    console.error(err);
+    showStatus('Error: ' + err.message, 'error');
   }
-  if(bannerFile){
-    const storageRef = ref(storage, 'settings/banner_' + Date.now() + '.jpg');
-    const snap = await uploadBytes(storageRef, bannerFile);
-    bannerUrl = await getDownloadURL(snap.ref);
-  }
-
-  await setDoc(doc(db, "settings", "hero"), {name, slogan, logoUrl, bannerUrl}, {merge: true});
-  alert('সেটিংস আপডেট হয়েছে');
 }
 
 // ওয়ার্ড সেভ
@@ -117,10 +161,10 @@ window.saveWard = async function() {
   if(editingId){
     await updateDoc(doc(db, "wards", editingId), {wardNo, name, mobile});
     editingId = null;
-    alert('আপডেট হয়েছে');
+    showStatus('আপডেট হয়েছে', 'success');
   } else {
     await addDoc(collection(db, "wards"), {wardNo, name, mobile});
-    alert('যোগ হয়েছে');
+    showStatus('যোগ হয়েছে', 'success');
   }
   document.getElementById('wardNo').value = '';
   document.getElementById('name').value = '';
