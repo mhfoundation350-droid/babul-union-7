@@ -1,18 +1,19 @@
 {
   "name": "মোহাম্মদ বাবুল - ৭ নং হাজিরহাট",
   "short_name": "বাবুল ভাই",
-  "start_url": "/",
+  "description": "৭ নং হাজিরহাট ইউনিয়ন চেয়ারম্যান প্রার্থী",
+  "start_url": ".",
   "display": "standalone",
   "background_color": "#2e7d32",
   "theme_color": "#2e7d32",
   "icons": [
     {
-      "src": "icon-192.png",
+      "src": "babul-logo.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "icon-512.png",
+      "src": "babul-logo.png", 
       "sizes": "512x512",
       "type": "image/png"
     }
