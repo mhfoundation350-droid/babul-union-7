@@ -26,7 +26,7 @@ a{text-decoration:none}
 
 /* Grid Cards */
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}
-.card{background:#fff;padding:20px;border-radius:10px;box-shadow:0 3px 10px rgba(0,0,0,0.1);border-top:4px solid #2e7d32;cursor:pointer;transition:0.2s}
+.card{background:#fff;padding:20px;border-radius:10px;box-shadow:0 3px 10px rgba(0,0,0,0.1);border-top:4px solid #2e7d32;cursor:pointer;transition:0.2s;color:#333;display:block}
 .card:hover{transform:translateY(-3px)}
 .card h3{color:#2e7d32;margin-bottom:10px}
 
@@ -49,12 +49,6 @@ a{text-decoration:none}
 .accordion-content{max-height:0;overflow:hidden;transition:max-height 0.3s ease-out}
 .accordion-content.show{max-height:1000px;padding:0 18px 18px 18px}
 .list-item{background:#f1f8e9;padding:12px;border-radius:6px;margin:8px 0;display:flex;align-items:center;gap:10px;border-left:4px solid #28a745;font-size:15px}
-
-/* POPUP CSS */
-.popup-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:999;justify-content:center;align-items:center;padding:15px}
-.popup-box{background:#fff;border-radius:12px;max-width:600px;width:100%;max-height:80vh;overflow-y:auto;padding:20px;position:relative}
-.popup-close{position:absolute;top:10px;right:15px;font-size:28px;cursor:pointer;color:#dc3545;font-weight:bold}
-.popup-title{text-align:center;color:#2e7d32;margin-bottom:15px;font-size:22px}
 
 @media(max-width:768px){.hero h1{font-size:24px}}
 </style>
@@ -95,11 +89,11 @@ a{text-decoration:none}
   </div>
 </section>
 
-<!-- 3. WARD BUTTON -->
-<section class="section" style="background:#fff;text-align:center">
+<!-- 3. WARD LIST - পপআপ বাদ দিয়ে সরাসরি লিস্ট -->
+<section class="section" style="background:#fff">
   <div class="container">
     <h2 class="section-title">🏘️ ইউনিয়নের ৯টি ওয়ার্ড - প্রতিনিধি</h2>
-    <button class="btn btn-primary" onclick="showWardListPopup()" style="font-size:18px;padding:15px 30px">ওয়ার্ড সমূহ দেখুন</button>
+    <div id="wardListContent" class="grid">লোড হচ্ছে...</div>
   </div>
 </section>
 
@@ -160,24 +154,6 @@ a{text-decoration:none}
   <p>ঠিকানা: ৭ নং হাজিরহাট ইউনিয়ন পরিষদ, কমলনগর, লক্ষ্মীপুর</p>
 </section>
 
-<!-- POPUP 1: WARD LIST -->
-<div id="wardListPopup" class="popup-overlay" onclick="closePopup('wardListPopup')">
-  <div class="popup-box" onclick="event.stopPropagation()">
-    <span class="popup-close" onclick="closePopup('wardListPopup')">×</span>
-    <h2 class="popup-title">🏘️ ৯টি ওয়ার্ড</h2>
-    <div id="wardListContent"></div>
-  </div>
-</div>
-
-<!-- POPUP 2: REPRESENTATIVE DETAIL -->
-<div id="repPopup" class="popup-overlay" onclick="closePopup('repPopup')">
-  <div class="popup-box" onclick="event.stopPropagation()">
-    <span class="popup-close" onclick="closePopup('repPopup')">×</span>
-    <h2 class="popup-title" id="repPopupTitle">ওয়ার্ড প্রতিনিধি</h2>
-    <div id="repPopupContent"></div>
-  </div>
-</div>
-
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFirestore, collection, getDocs, query, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -192,7 +168,6 @@ const firebaseConfig = {
 };
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-let allWards = [];
 
 // ACCORDION FUNCTION
 window.toggleAccordion = function(header){
@@ -201,12 +176,7 @@ window.toggleAccordion = function(header){
   content.classList.toggle('show');
 }
 
-// Popup Close
-window.closePopup = function(id){
-  document.getElementById(id).style.display = 'none';
-}
-
-// বাংলা থেকে ইংলিশ নাম্বারে কনভার্ট করার ফাংশন
+// বাংলা থেকে ইংলিশ নাম্বারে কনভার্ট
 function toEnglishNumber(num) {
   const bn = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
   const en = ['0','1','2','3','4','5','6','7','8','9'];
@@ -217,41 +187,34 @@ function toEnglishNumber(num) {
   return parseInt(result) || 0;
 }
 
-// Step 1: 9টি ওয়ার্ড এর লিস্ট দেখানো - Group করে
-window.showWardListPopup = async function(){
-  document.getElementById('wardListPopup').style.display = 'flex';
+// 9টি ওয়ার্ড এর লিস্ট লোড করা
+async function loadWardList(){
   const q = query(collection(db, "wards"));
   const snap = await getDocs(q);
-  allWards = [];
+  let allWards = [];
   snap.forEach((d) => {
     const data = d.data();
-    data.wardNo = toEnglishNumber(data.wardNo); // বাংলা হলে ইংলিশে কনভার্ট
-    allWards.push({id: d.id,...data});
+    data.wardNo = toEnglishNumber(data.wardNo);
+    allWards.push(data);
   });
 
-  allWards.sort((a,b) => a.wardNo - b.wardNo); // নাম্বার দিয়ে সর্ট
-
-  // WardNo দিয়ে Group করা
   const groupedWards = {};
   allWards.forEach(ward => {
     const wardNo = ward.wardNo;
     if(wardNo >= 1 && wardNo <= 9){
-      if(!groupedWards[wardNo]){
-        groupedWards[wardNo] = [];
-      }
+      if(!groupedWards[wardNo]) groupedWards[wardNo] = [];
       groupedWards[wardNo].push(ward);
     }
   });
 
   let html = '';
-  // 1 থেকে 9 পর্যন্ত লুপ
   for(let i = 1; i <= 9; i++){
     const wardData = groupedWards[i];
     if(wardData && wardData.length > 0){
-      html += `<div class="card" onclick="showRepPopup('${i}')">
+      html += `<a href="ward.html?ward=${i}" class="card">
         <h3>ওয়ার্ড ${i}</h3>
-        <p>${wardData.length} জন প্রতিনিধি | দেখতে ক্লিক করুন →</p>
-      </div>`;
+        <p>${wardData.length} জন প্রতিনিধি | বিস্তারিত দেখুন →</p>
+      </a>`;
     } else {
       html += `<div class="card" style="opacity:0.6;cursor:not-allowed">
         <h3>ওয়ার্ড ${i}</h3>
@@ -261,36 +224,9 @@ window.showWardListPopup = async function(){
   }
   document.getElementById('wardListContent').innerHTML = html;
 }
+loadWardList();
 
-// Step 2: নির্দিষ্ট ওয়ার্ডের সব প্রতিনিধি দেখানো
-window.showRepPopup = function(wardNo){
-  closePopup('wardListPopup');
-  const wardMembers = allWards.filter(w => w.wardNo == wardNo);
-  if(wardMembers.length === 0) return alert('তথ্য পাওয়া যায়নি');
-
-  document.getElementById('repPopupTitle').innerText = `ওয়ার্ড ${wardNo} - সকল প্রতিনিধি`;
-
-  let html = '';
-  wardMembers.forEach(data => {
-    let phone = data.mobile.replace(/\D/g,'');
-    if(phone.startsWith('0')) phone = '88' + phone;
-
-    html += `<div style="background:#f1f8e9;padding:15px;border-radius:8px;margin-bottom:12px;border-left:4px solid #28a745">
-      <p><b>নাম:</b> ${data.name}</p>
-      <p><b>পদবী:</b> ${data.designation || 'সদস্য'}</p>
-      <p><b>মোবাইল:</b> ${data.mobile}</p>
-      <div style="display:flex;gap:10px;margin-top:10px">
-        <a href="tel:${phone}" class="btn btn-secondary" style="flex:1;text-align:center;padding:8px">📞 কল</a>
-        <a href="https://wa.me/${phone}" target="_blank" class="btn btn-primary" style="flex:1;text-align:center;padding:8px;background:#25D366">💬 WhatsApp</a>
-      </div>
-    </div>`;
-  });
-
-  document.getElementById('repPopupContent').innerHTML = html;
-  document.getElementById('repPopup').style.display = 'flex';
-}
-
-// Hero Settings লোড - base64 সাপোর্ট
+// Hero Settings লোড
 async function loadSettings(){
   const snap = await getDoc(doc(db, "settings", "hero"));
   if(snap.exists()){
