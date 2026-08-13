@@ -20,7 +20,6 @@ img.banner-preview{width:100%;height:120px;object-fit:cover;border-radius:6px;ma
 .ward-box{border:1px solid #ddd;padding:10px;margin:8px 0;border-radius:6px;background:#f9f9f9;font-size:14px}
 #status{padding:8px;margin:8px 0;border-radius:5px;display:none;font-size:14px}
 .success{background:#d4edda;color:#155724}
-.error{background:#f8d7da;color:#721c24}
 </style>
 </head>
 <body>
@@ -33,12 +32,14 @@ img.banner-preview{width:100%;height:120px;object-fit:cover;border-radius:6px;ma
   <h3>🏆 Hero Section সেটিংস</h3>
   <input type="text" id="candidateName" placeholder="প্রার্থীর নাম - মোহাম্মদ বাবুল">
   <input type="text" id="slogan" placeholder="স্লোগান">
-  <label><b>লোগো/ছবি:</b></label>
-  <input type="file" id="logoUpload" accept="image/*">
+  
+  <label><b>লোগো ছবির লিংক:</b></label>
+  <small>imgur.com এ আপলোড করে Direct Link এখানে দিন</small>
+  <input type="text" id="logoUrl" placeholder="https://i.imgur.com/xxx.jpg">
   <img id="logoPreview" class="preview" src="" style="display:none">
 
-  <label><b>Banner:</b></label>
-  <input type="file" id="bannerUpload" accept="image/*">
+  <label><b>Banner ছবির লিংক:</b></label>
+  <input type="text" id="bannerUrl" placeholder="https://i.imgur.com/xxx.jpg">
   <img id="bannerPreview" class="banner-preview" src="" style="display:none">
 
   <button onclick="saveSettings()">সেভ করুন</button>
@@ -60,7 +61,6 @@ img.banner-preview{width:100%;height:120px;object-fit:cover;border-radius:6px;ma
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFirestore, collection, addDoc, getDocs, deleteDoc, updateDoc, doc, query, orderBy, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBV_XpVRx7fbIMBSDmcjc6BNxIoamQ7SoA",
@@ -73,30 +73,26 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const storage = getStorage(app);
 let editingId = null;
-let currentSettings = {};
 
-function showStatus(msg, type){
+function showStatus(msg){
   const el = document.getElementById('status');
-  el.className = type;
+  el.className = 'success';
   el.innerText = msg;
   el.style.display = 'block';
   setTimeout(()=> el.style.display='none', 3000);
 }
 
-// Preview
-document.getElementById('logoUpload').onchange = e => {
-  const file = e.target.files[0];
-  if(file){
-    document.getElementById('logoPreview').src = URL.createObjectURL(file);
+// Link preview
+document.getElementById('logoUrl').oninput = e => {
+  if(e.target.value){
+    document.getElementById('logoPreview').src = e.target.value;
     document.getElementById('logoPreview').style.display = 'block';
   }
 }
-document.getElementById('bannerUpload').onchange = e => {
-  const file = e.target.files[0];
-  if(file){
-    document.getElementById('bannerPreview').src = URL.createObjectURL(file);
+document.getElementById('bannerUrl').oninput = e => {
+  if(e.target.value){
+    document.getElementById('bannerPreview').src = e.target.value;
     document.getElementById('bannerPreview').style.display = 'block';
   }
 }
@@ -105,50 +101,26 @@ document.getElementById('bannerUpload').onchange = e => {
 async function loadCurrentSettings(){
   const snap = await getDoc(doc(db, "settings", "hero"));
   if(snap.exists()){
-    currentSettings = snap.data();
-    document.getElementById('candidateName').value = currentSettings.name || '';
-    document.getElementById('slogan').value = currentSettings.slogan || '';
-    if(currentSettings.logoUrl) {
-      document.getElementById('logoPreview').src = currentSettings.logoUrl;
-      document.getElementById('logoPreview').style.display = 'block';
-    }
-    if(currentSettings.bannerUrl) {
-      document.getElementById('bannerPreview').src = currentSettings.bannerUrl;
-      document.getElementById('bannerPreview').style.display = 'block';
-    }
+    const data = snap.data();
+    document.getElementById('candidateName').value = data.name || '';
+    document.getElementById('slogan').value = data.slogan || '';
+    document.getElementById('logoUrl').value = data.logoUrl || '';
+    document.getElementById('bannerUrl').value = data.bannerUrl || '';
+    if(data.logoUrl) document.getElementById('logoPreview').style.display = 'block';
+    if(data.bannerUrl) document.getElementById('bannerPreview').style.display = 'block';
   }
 }
 loadCurrentSettings();
 
 // সেটিংস সেভ
 window.saveSettings = async function() {
-  try{
-    const name = document.getElementById('candidateName').value;
-    const slogan = document.getElementById('slogan').value;
-    const logoFile = document.getElementById('logoUpload').files[0];
-    const bannerFile = document.getElementById('bannerUpload').files[0];
+  const name = document.getElementById('candidateName').value;
+  const slogan = document.getElementById('slogan').value;
+  const logoUrl = document.getElementById('logoUrl').value;
+  const bannerUrl = document.getElementById('bannerUrl').value;
 
-    let logoUrl = currentSettings.logoUrl || "";
-    let bannerUrl = currentSettings.bannerUrl || "";
-
-    if(logoFile){
-      const storageRef = ref(storage, 'settings/logo_' + Date.now() + '.jpg');
-      const snap = await uploadBytes(storageRef, logoFile);
-      logoUrl = await getDownloadURL(snap.ref);
-    }
-    if(bannerFile){
-      const storageRef = ref(storage, 'settings/banner_' + Date.now() + '.jpg');
-      const snap = await uploadBytes(storageRef, bannerFile);
-      bannerUrl = await getDownloadURL(snap.ref);
-    }
-
-    await setDoc(doc(db, "settings", "hero"), {name, slogan, logoUrl, bannerUrl});
-    currentSettings = {name, slogan, logoUrl, bannerUrl};
-    showStatus('সেটিংস সফলভাবে সেভ হয়েছে ✅', 'success');
-  }catch(err){
-    console.error(err);
-    showStatus('Error: ' + err.message, 'error');
-  }
+  await setDoc(doc(db, "settings", "hero"), {name, slogan, logoUrl, bannerUrl});
+  showStatus('সেটিংস সফলভাবে সেভ হয়েছে ✅');
 }
 
 // ওয়ার্ড সেভ
@@ -161,15 +133,14 @@ window.saveWard = async function() {
   if(editingId){
     await updateDoc(doc(db, "wards", editingId), {wardNo, name, mobile});
     editingId = null;
-    showStatus('আপডেট হয়েছে', 'success');
   } else {
     await addDoc(collection(db, "wards"), {wardNo, name, mobile});
-    showStatus('যোগ হয়েছে', 'success');
   }
   document.getElementById('wardNo').value = '';
   document.getElementById('name').value = '';
   document.getElementById('mobile').value = '';
   loadWards();
+  showStatus('সেভ হয়েছে');
 }
 
 window.editWard = function(id, wardNo, name, mobile){
