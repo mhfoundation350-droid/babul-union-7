@@ -180,7 +180,7 @@ a{text-decoration:none}
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, getDocs, query, orderBy, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, getDocs, query, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBV_XpVRx7fbIMBSDmcjc6BNxIoamQ7SoA",
@@ -206,22 +206,41 @@ window.closePopup = function(id){
   document.getElementById(id).style.display = 'none';
 }
 
+// বাংলা থেকে ইংলিশ নাম্বারে কনভার্ট করার ফাংশন
+function toEnglishNumber(num) {
+  const bn = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+  const en = ['0','1','2','3','4','5','6','7','8','9'];
+  let result = num.toString();
+  for(let i=0; i<10; i++){
+    result = result.replace(new RegExp(bn[i], 'g'), en[i]);
+  }
+  return parseInt(result) || 0;
+}
+
 // Step 1: 9টি ওয়ার্ড এর লিস্ট দেখানো - Group করে
 window.showWardListPopup = async function(){
   document.getElementById('wardListPopup').style.display = 'flex';
-  const q = query(collection(db, "wards"), orderBy("wardNo"));
+  const q = query(collection(db, "wards"));
   const snap = await getDocs(q);
   allWards = [];
-  snap.forEach((d) => allWards.push({id: d.id,...d.data()}));
+  snap.forEach((d) => {
+    const data = d.data();
+    data.wardNo = toEnglishNumber(data.wardNo); // বাংলা হলে ইংলিশে কনভার্ট
+    allWards.push({id: d.id,...data});
+  });
+
+  allWards.sort((a,b) => a.wardNo - b.wardNo); // নাম্বার দিয়ে সর্ট
 
   // WardNo দিয়ে Group করা
   const groupedWards = {};
   allWards.forEach(ward => {
     const wardNo = ward.wardNo;
-    if(!groupedWards[wardNo]){
-      groupedWards[wardNo] = [];
+    if(wardNo >= 1 && wardNo <= 9){
+      if(!groupedWards[wardNo]){
+        groupedWards[wardNo] = [];
+      }
+      groupedWards[wardNo].push(ward);
     }
-    groupedWards[wardNo].push(ward);
   });
 
   let html = '';
