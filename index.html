@@ -11,7 +11,7 @@ a{text-decoration:none}
 .container{max-width:1200px;margin:auto;padding:0 15px}
 
 /* Hero */
-.hero{background:linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),url('https://i.imgur.com/8Km9tLL.jpg') center/cover; color:#fff;text-align:center;padding:80px 20px;background-attachment:fixed}
+.hero{background:linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)) center/cover; color:#fff;text-align:center;padding:80px 20px;background-attachment:fixed}
 .hero img{width:180px;height:180px;border-radius:50%;border:5px solid #fff;margin-bottom:20px;object-fit:cover}
 .hero h1{font-size:32px;margin-bottom:10px}
 .hero h2{font-size:20px;color:#ffd700;margin-bottom:20px}
@@ -57,6 +57,7 @@ a{text-decoration:none}
   </div>
 </section>
 
+<!-- বাকি সব সেকশন আগের মতই -->
 <!-- 2. ABOUT UNION -->
 <section class="section container">
   <h2 class="section-title">🗺️ ৭ নং হাজিরহাট ইউনিয়ন সম্পর্কে</h2>
@@ -172,15 +173,15 @@ async function loadWardsUser(){
   document.getElementById('wardsContainer').innerHTML = html || '<p>এখনো প্রতিনিধি যোগ হয়নি</p>';
 }
 
-// Hero Settings লোড
+// Hero Settings লোড - base64 সাপোর্ট
 async function loadSettings(){
   const snap = await getDoc(doc(db, "settings", "hero"));
   if(snap.exists()){
     const data = snap.data();
-    if(data.logoUrl) document.getElementById('heroLogo').src = data.logoUrl;
+    if(data.logoUrl) document.getElementById('heroLogo').src = data.logoUrl; // base64
     if(data.name) document.getElementById('heroName').innerText = data.name;
     if(data.slogan) document.getElementById('heroSlogan').innerText = `"${data.slogan}"`;
-    if(data.bannerUrl) document.getElementById('heroSection').style.backgroundImage = `linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),url('${data.bannerUrl}')`;
+    if(data.bannerUrl) document.getElementById('heroSection').style.backgroundImage = `linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),url('${data.bannerUrl}')`; // base64
   }
 }
 
