@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>মোহাম্মদ বাবুল - ৭ নং হাজিরহাট ইউনিয়ন চেয়ারম্যান প্রার্থী</title>
+
+<!-- PWA এর জন্য নতুন 3 লাইন -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#2e7d32">
+<link rel="icon" href="icon-192.png">
+
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'SolaimanLipi',sans-serif;background:#f8f9fa;color:#333;font-size:14px}
@@ -19,9 +25,9 @@ a{text-decoration:none}
 .btn{padding:10px 18px;border-radius:25px;font-weight:bold;font-size:13px;cursor:pointer;border:none;transition:all 0.2s;box-shadow:0 3px 8px rgba(0,0,0,0.15)}
 .btn:active{transform:scale(0.95)}
 .btn-primary{background:#28a745;color:#fff}
-.btn-whatsapp{background:#25D366;color:#fff;border:2px solid #fff} /* WhatsApp Green Only */
+.btn-whatsapp{background:#25D366;color:#fff;border:2px solid #fff}
 
-/* Facebook Box - Unique */
+/* Facebook Box */
 .social-box{background:linear-gradient(135deg, #1877F2, #0A66FF);color:#fff;padding:12px;border-radius:25px;text-align:center;margin:15px auto 0 auto;max-width:400px;box-shadow:0 4px 12px rgba(24,119,242,0.3);transition:0.2s;cursor:pointer}
 .social-box:active{transform:scale(0.96)}
 
@@ -29,7 +35,7 @@ a{text-decoration:none}
 .section{padding:25px 0}
 .section-title{text-align:center;font-size:20px;color:#2e7d32;margin-bottom:18px}
 
-/* Grid Cards - Unique Click Effect */
+/* Grid Cards */
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
 .card{background:#fff;padding:12px;border-radius:12px;box-shadow:0 2px 5px rgba(0,0,0,0.08);border-top:3px solid #2e7d32;cursor:pointer;transition:all 0.2s;color:#333;display:block}
 .card:hover{transform:translateY(-3px);box-shadow:0 4px 10px rgba(46,125,50,0.15)}
@@ -37,7 +43,7 @@ a{text-decoration:none}
 .card h3{color:#2e7d32;margin-bottom:5px;font-size:15px}
 .card p{font-size:12.5px;color:#555}
 
-/* Accordion - Unique */
+/* Accordion */
 .accordion-item{background:#fff;margin:10px 0;border-radius:12px;box-shadow:0 2px 5px rgba(0,0,0,0.08);border-top:3px solid #2e7d32;overflow:hidden}
 .accordion-header{padding:14px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-size:14px;font-weight:bold;color:#2e7d32;transition:0.2s}
 .accordion-header:active{background:#f1f8e9}
@@ -56,7 +62,7 @@ a{text-decoration:none}
 .faq-item{background:#fff;padding:10px;margin:8px 0;border-radius:8px;font-size:13px;cursor:pointer;transition:0.2s}
 .faq-item:active{background:#f1f8e9;transform:scale(0.99)}
 
-/* Contact - NEW UNIQUE DESIGN */
+/* Contact */
 .contact{background:linear-gradient(135deg, #2e7d32, #1b5e20);color:#fff;padding:30px 15px;text-align:center}
 .contact-box{background:rgba(255,255,255,0.1);padding:20px;border-radius:15px;backdrop-filter:blur(5px);border:1px solid rgba(255,255,255,0.2);max-width:500px;margin:auto}
 .contact-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:18px 0}
@@ -64,7 +70,7 @@ a{text-decoration:none}
 .contact-btn:active{transform:scale(0.95)}
 .contact-btn.icon{font-size:22px}
 .call-btn{background:#fff;color:#2e7d32}
-.wa-btn{background:#25D366;color:#fff} /* WhatsApp Green */
+.wa-btn{background:#25D366;color:#fff}
 
 @media(max-width:768px){.hero h1{font-size:20px}}
 </style>
@@ -76,7 +82,7 @@ a{text-decoration:none}
 
 <!-- 1. HERO SECTION -->
 <section class="hero" id="heroSection">
-  <img id="heroLogo" src="https://via.placeholder.com/180" alt="মোহাম্মদ বাবুল">
+  <img id="heroLogo" src="babul-logo.png" alt="মোহাম্মদ বাবুল"> <!-- আপনার ছবির নাম -->
   <h1 id="heroName">মোহাম্মদ বাবুল</h1>
   <h2 id="heroSlogan">"উন্নয়ন, সততা ও জনসেবার অঙ্গীকার"</h2>
   <p style="font-size:13px">৭ নং হাজিরহাট ইউনিয়ন পরিষদ চেয়ারম্যান প্রার্থী</p>
@@ -86,15 +92,15 @@ a{text-decoration:none}
     <a href="https://wa.me/8801728665896" target="_blank" class="btn btn-whatsapp" onclick="playSound()">💬 হোয়াটসঅ্যাপে মেসেজ করুন</a>
   </div>
 
-  <!-- Facebook বক্স -->
   <div class="social-box" onclick="playSound()">
-    <a href="https://www.facebook.com/share/1B6X6Ek4Qj/" target="_blank">
+    <a href="https://www.facebook.com/share/1B6X6Ek4Qj/" target="_blank" style="color:#fff">
       📘 আমাদের Facebook পেজে যুক্ত হোন
     </a>
   </div>
 </section>
 
-<!-- 3. WARD LIST -->
+<!-- বাকি সব সেকশন আগের মতোই -->
+<!-- WARD LIST -->
 <section class="section" style="background:#fff">
   <div class="container">
     <h2 class="section-title">🏘️ ইউনিয়নের ৯টি ওয়ার্ড - প্রতিনিধি</h2>
@@ -102,7 +108,7 @@ a{text-decoration:none}
   </div>
 </section>
 
-<!-- 2. ABOUT UNION - ACCORDION -->
+<!-- ABOUT UNION -->
 <section class="section container">
   <div class="accordion-item">
     <div class="accordion-header" onclick="toggleAccordion(this);playSound()">
@@ -124,7 +130,7 @@ a{text-decoration:none}
   </div>
 </section>
 
-<!-- 4. VISION 2030 - ACCORDION -->
+<!-- VISION 2030 -->
 <section class="section container">
   <div class="accordion-item">
     <div class="accordion-header" onclick="toggleAccordion(this);playSound()">
@@ -146,7 +152,7 @@ a{text-decoration:none}
   </div>
 </section>
 
-<!-- 5. PROGRESS -->
+<!-- PROGRESS -->
 <section class="section" style="background:#fff">
   <div class="container">
     <h2 class="section-title">📈 উন্নয়ন অগ্রগতি</h2>
@@ -157,14 +163,14 @@ a{text-decoration:none}
   </div>
 </section>
 
-<!-- 6. TESTIMONIALS -->
+<!-- TESTIMONIALS -->
 <section class="section container">
   <h2 class="section-title">❤️ জনগণের মতামত</h2>
   <div class="card" onclick="playSound()">"বাবুল ভাই সবসময় মানুষের পাশে থাকেন।"</div>
   <div class="card" onclick="playSound()">"সৎ ও যোগ্য প্রার্থী।"</div>
 </section>
 
-<!-- 7. FAQ -->
+<!-- FAQ -->
 <section class="section" style="background:#fff">
   <div class="container">
     <h2 class="section-title">❓ সাধারণ প্রশ্ন</h2>
@@ -173,28 +179,22 @@ a{text-decoration:none}
   </div>
 </section>
 
-<!-- 8. CONTACT - NEW DESIGN -->
+<!-- CONTACT -->
 <section id="contact" class="contact">
   <div class="container">
     <h2 class="section-title" style="color:#fff; margin-bottom:20px">📞 যোগাযোগ</h2>
-
     <div class="contact-box">
       <p style="font-size:13px;margin-bottom:15px;opacity:0.9">যেকোনো প্রয়োজনে সরাসরি যোগাযোগ করুন</p>
-
       <div class="contact-btns">
-        <!-- Call Button -->
         <a href="tel:01728665896" class="contact-btn call-btn" onclick="playSound()">
           <span class="icon">📞</span>
           <span>কল করুন<br><b>01728665896</b></span>
         </a>
-
-        <!-- WhatsApp Button -->
         <a href="https://wa.me/8801728665896" target="_blank" class="contact-btn wa-btn" onclick="playSound()">
           <span class="icon">💬</span>
           <span>WhatsApp<br><b>01728665896</b></span>
         </a>
       </div>
-
       <p style="font-size:12.5px;margin-top:15px;opacity:0.9">
         ঠিকানা: ৭ নং হাজিরহাট ইউনিয়ন পরিষদ, কমলনগর, লক্ষ্মীপুর
       </p>
@@ -217,21 +217,21 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Click Sound Function
+// Click Sound
 window.playSound = function(){
   const sound = document.getElementById('clickSound');
   sound.currentTime = 0;
   sound.play().catch(e=>{});
 }
 
-// ACCORDION FUNCTION
+// ACCORDION
 window.toggleAccordion = function(header){
   const content = header.nextElementSibling;
   header.classList.toggle('active');
   content.classList.toggle('show');
 }
 
-// বাংলা থেকে ইংলিশ নাম্বারে কনভার্ট
+// বাংলা থেকে ইংলিশ নাম্বার
 function toEnglishNumber(num) {
   const bn = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
   const en = ['0','1','2','3','4','5','6','7','8','9'];
@@ -242,7 +242,7 @@ function toEnglishNumber(num) {
   return parseInt(result) || 0;
 }
 
-// 9টি ওয়ার্ড এর লিস্ট লোড করা
+// 9টি ওয়ার্ড লোড
 async function loadWardList(){
   const q = query(collection(db, "wards"));
   const snap = await getDocs(q);
@@ -281,7 +281,7 @@ async function loadWardList(){
 }
 loadWardList();
 
-// Hero Settings লোড
+// Hero Settings
 async function loadSettings(){
   const snap = await getDoc(doc(db, "settings", "hero"));
   if(snap.exists()){
@@ -293,6 +293,11 @@ async function loadSettings(){
   }
 }
 loadSettings();
+
+// PWA Service Worker Register
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('sw.js');
+}
 </script>
 
 </body>
