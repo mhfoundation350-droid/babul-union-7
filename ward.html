@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ওয়ার্ড প্রতিনিধি - মোহাম্মদ বাবুল</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'SolaimanLipi',sans-serif;background:#f8f9fa;color:#333}
+.container{max-width:800px;margin:auto;padding:20px}
+.header{background:#2e7d32;color:#fff;padding:20px;text-align:center}
+.btn-back{display:inline-block;margin:20px 0;padding:10px 20px;background:#28a745;color:#fff;border-radius:8px;text-decoration:none}
+.member-card{background:#fff;padding:15px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.1);margin:15px 0;border-left:4px solid #28a745}
+.btn{padding:10px 15px;border-radius:8px;font-weight:bold;font-size:15px;text-decoration:none;text-align:center}
+.btn-primary{background:#25D366;color:#fff}
+.btn-secondary{background:#6c757d;color:#fff}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1 id="wardTitle">ওয়ার্ড প্রতিনিধি</h1>
+</div>
+
+<div class="container">
+  <a href="index.html" class="btn-back">← হোমপেজে ফিরে যান</a>
+  <div id="memberList">লোড হচ্ছে...</div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, getDocs, query } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const firebaseConfig = { apiKey: "AIzaSyBV_XpVRx7fbIMBSDmcjc6BNxIoamQ7SoA", authDomain: "babul-union-7.firebaseapp.com", projectId: "babul-union-7", storageBucket: "babul-union-7.firebasestorage.app", messagingSenderId: "424653767943", appId: "1:424653767943:web:696e371ded9477e04831a2" };
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+function toEnglishNumber(num) {
+  const bn = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+  const en = ['0','1','2','3','4','5','6','7','8','9'];
+  let result = num.toString();
+  for(let i=0; i<10; i++){ result = result.replace(new RegExp(bn[i], 'g'), en[i]); }
+  return parseInt(result) || 0;
+}
+
+async function loadMembers(){
+  const urlParams = new URLSearchParams(window.location.search);
+  const wardNo = toEnglishNumber(urlParams.get('ward'));
+  document.getElementById('wardTitle').innerText = `ওয়ার্ড ${wardNo} - সকল প্রতিনিধি`;
+
+  const snap = await getDocs(query(collection(db, "wards")));
+  let members = [];
+  snap.forEach(d => {
+    const data = d.data();
+    if(toEnglishNumber(data.wardNo) == wardNo) members.push(data);
+  });
+
+  let html = '';
+  if(members.length === 0) html = '<p>এই ওয়ার্ডে এখনো প্রতিনিধি যোগ হয়নি</p>';
+
+  members.forEach(data => {
+    let phone = data.mobile.replace(/\D/g,'');
+    if(phone.startsWith('0')) phone = '88' + phone;
+    html += `<div class="member-card">
+      <h3>${data.name}</h3>
+      <p><b>পদবী:</b> ${data.designation || 'সদস্য'}</p>
+      <p><b>মোবাইল:</b> ${data.mobile}</p>
+      <div style="display:flex;gap:10px;margin-top:10px">
+        <a href="tel:${phone}" class="btn btn-secondary" style="flex:1">📞 কল</a>
+        <a href="https://wa.me/${phone}" target="_blank" class="btn btn-primary" style="flex:1">💬 WhatsApp</a>
+      </div>
+    </div>`;
+  });
+  document.getElementById('memberList').innerHTML = html;
+}
+loadMembers();
+</script>
+</body>
+</html>
