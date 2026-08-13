@@ -16,7 +16,7 @@ a{text-decoration:none}
 .hero h1{font-size:32px;margin-bottom:10px}
 .hero h2{font-size:20px;color:#ffd700;margin-bottom:20px}
 .hero-btns{display:flex;gap:15px;justify-content:center;flex-wrap:wrap}
-.btn{padding:12px 25px;border-radius:8px;font-weight:bold;font-size:16px}
+.btn{padding:12px 25px;border-radius:8px;font-weight:bold;font-size:16px;cursor:pointer}
 .btn-primary{background:#28a745;color:#fff}
 .btn-secondary{background:#fff;color:#000}
 
@@ -26,7 +26,8 @@ a{text-decoration:none}
 
 /* Grid Cards */
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}
-.card{background:#fff;padding:20px;border-radius:10px;box-shadow:0 3px 10px rgba(0,0,0,0.1);border-top:4px solid #2e7d32}
+.card{background:#fff;padding:20px;border-radius:10px;box-shadow:0 3px 10px rgba(0,0,0,0.1);border-top:4px solid #2e7d32;cursor:pointer;transition:0.2s}
+.card:hover{transform:translateY(-3px)}
 .card h3{color:#2e7d32;margin-bottom:10px}
 
 /* Progress Bar */
@@ -39,6 +40,21 @@ a{text-decoration:none}
 /* Contact */
 .contact{background:#2e7d32;color:#fff;padding:40px 20px;text-align:center}
 .contact a{color:#ffd700;font-size:20px;font-weight:bold}
+
+/* ACCORDION CSS */
+.accordion-item{background:#fff;margin:15px 0;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.1);border-top:4px solid #2e7d32}
+.accordion-header{padding:18px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-size:18px;font-weight:bold;color:#2e7d32}
+.accordion-header .arrow{transition:0.3s;font-size:22px}
+.accordion-header.active .arrow{transform:rotate(180deg)}
+.accordion-content{max-height:0;overflow:hidden;transition:max-height 0.3s ease-out}
+.accordion-content.show{max-height:1000px;padding:0 18px 18px 18px}
+.list-item{background:#f1f8e9;padding:12px;border-radius:6px;margin:8px 0;display:flex;align-items:center;gap:10px;border-left:4px solid #28a745;font-size:15px}
+
+/* POPUP CSS */
+.popup-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:999;justify-content:center;align-items:center;padding:15px}
+.popup-box{background:#fff;border-radius:12px;max-width:500px;width:100%;max-height:80vh;overflow-y:auto;padding:20px;position:relative}
+.popup-close{position:absolute;top:10px;right:15px;font-size:28px;cursor:pointer;color:#dc3545;font-weight:bold}
+.popup-title{text-align:center;color:#2e7d32;margin-bottom:15px;font-size:22px}
 
 @media(max-width:768px){.hero h1{font-size:24px}}
 </style>
@@ -57,29 +73,33 @@ a{text-decoration:none}
   </div>
 </section>
 
-<!-- বাকি সব সেকশন আগের মতই -->
-<!-- 2. ABOUT UNION -->
+<!-- 2. ABOUT UNION - ACCORDION -->
 <section class="section container">
-  <h2 class="section-title">🗺️ ৭ নং হাজিরহাট ইউনিয়ন সম্পর্কে</h2>
-  <p>৭ নং হাজিরহাট ইউনিয়ন পরিষদ কমলনগর উপজেলা, লক্ষ্মীপুর জেলার অন্যতম গুরুত্বপূর্ণ ও প্রাণকেন্দ্র।</p>
-  <div class="grid" style="margin-top:20px">
-    <div class="card">✅ কমলনগর উপজেলা পরিষদ</div>
-    <div class="card">✅ উপজেলা প্রশাসনিক কার্যালয়</div>
-    <div class="card">✅ কমলনগর থানা</div>
-    <div class="card">✅ সরকারি কলেজ</div>
-    <div class="card">✅ মডেল মসজিদ</div>
-    <div class="card">✅ ফায়ার সার্ভিস ও সিভিল ডিফেন্স</div>
-    <div class="card">✅ পল্লী বিদ্যুৎ অফিস</div>
-    <div class="card">✅ উপজেলা স্বাস্থ্যসেবা কেন্দ্র</div>
-    <div class="card">✅ হাজিরহাট বাজার</div>
+  <div class="accordion-item">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      <span>🗺️ ৭ নং হাজিরহাট ইউনিয়ন সম্পর্কে</span>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="accordion-content">
+      <p style="margin-bottom:15px">৭ নং হাজিরহাট ইউনিয়ন পরিষদ কমলনগর উপজেলা, লক্ষ্মীপুর জেলার অন্যতম গুরুত্বপূর্ণ ও প্রাণকেন্দ্র।</p>
+      <div class="list-item">✅ কমলনগর উপজেলা পরিষদ</div>
+      <div class="list-item">✅ উপজেলা প্রশাসনিক কার্যালয়</div>
+      <div class="list-item">✅ কমলনগর থানা</div>
+      <div class="list-item">✅ সরকারি কলেজ</div>
+      <div class="list-item">✅ মডেল মসজিদ</div>
+      <div class="list-item">✅ ফায়ার সার্ভিস ও সিভিল ডিফেন্স</div>
+      <div class="list-item">✅ পল্লী বিদ্যুৎ অফিস</div>
+      <div class="list-item">✅ উপজেলা স্বাস্থ্যসেবা কেন্দ্র</div>
+      <div class="list-item">✅ হাজিরহাট বাজার</div>
+    </div>
   </div>
 </section>
 
-<!-- 3. WARD REPRESENTATIVES -->
-<section class="section" style="background:#fff">
+<!-- 3. WARD BUTTON -->
+<section class="section" style="background:#fff;text-align:center">
   <div class="container">
     <h2 class="section-title">🏘️ ইউনিয়নের ৯টি ওয়ার্ড - প্রতিনিধি</h2>
-    <div id="wardsContainer" class="grid"><p>লোড হচ্ছে...</p></div>
+    <button class="btn btn-primary" onclick="showWardListPopup()" style="font-size:18px;padding:15px 30px">ওয়ার্ড সমূহ দেখুন</button>
   </div>
 </section>
 
@@ -135,6 +155,24 @@ a{text-decoration:none}
   <p>ঠিকানা: ৭ নং হাজিরহাট ইউনিয়ন পরিষদ, কমলনগর, লক্ষ্মীপুর</p>
 </section>
 
+<!-- POPUP 1: WARD LIST -->
+<div id="wardListPopup" class="popup-overlay" onclick="closePopup('wardListPopup')">
+  <div class="popup-box" onclick="event.stopPropagation()">
+    <span class="popup-close" onclick="closePopup('wardListPopup')">×</span>
+    <h2 class="popup-title">🏘️ ৯টি ওয়ার্ড</h2>
+    <div id="wardListContent"></div>
+  </div>
+</div>
+
+<!-- POPUP 2: REPRESENTATIVE DETAIL -->
+<div id="repPopup" class="popup-overlay" onclick="closePopup('repPopup')">
+  <div class="popup-box" onclick="event.stopPropagation()">
+    <span class="popup-close" onclick="closePopup('repPopup')">×</span>
+    <h2 class="popup-title" id="repPopupTitle">ওয়ার্ড প্রতিনিধি</h2>
+    <div id="repPopupContent"></div>
+  </div>
+</div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFirestore, collection, getDocs, query, orderBy, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -149,28 +187,62 @@ const firebaseConfig = {
 };
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+let allWards = [];
 
-// ওয়ার্ড লোড
-async function loadWardsUser(){
+// ACCORDION FUNCTION
+window.toggleAccordion = function(header){
+  const content = header.nextElementSibling;
+  header.classList.toggle('active');
+  content.classList.toggle('show');
+}
+
+// Popup Close
+window.closePopup = function(id){
+  document.getElementById(id).style.display = 'none';
+}
+
+// Step 1: 9টি ওয়ার্ড এর লিস্ট দেখানো
+window.showWardListPopup = async function(){
+  document.getElementById('wardListPopup').style.display = 'flex';
   const q = query(collection(db, "wards"), orderBy("wardNo"));
   const snap = await getDocs(q);
+  allWards = [];
+  snap.forEach((d) => allWards.push({id: d.id, ...d.data()}));
+  
   let html = '';
-  snap.forEach((d) => {
-    const data = d.data();
-    let phone = data.mobile.replace(/\D/g,''); 
-    if(phone.startsWith('0')) phone = '88' + phone; 
-    html += `<div class="card">
+  if(allWards.length === 0) html = '<p>এখনো প্রতিনিধি যোগ হয়নি</p>';
+  allWards.forEach((data) => {
+    html += `<div class="card" onclick="showRepPopup('${data.wardNo}')">
       <h3>ওয়ার্ড ${data.wardNo}</h3>
-      <b>প্রতিনিধি:</b> ${data.name}<br>
-      <b>মোবাইল:</b> ${data.mobile}<br>
-      <b>ঠিকানা:</b> ৭ নং হাজিরহাট ইউনিয়ন<br>
-      <div style="margin-top:10px">
-        <a href="tel:${phone}" class="btn btn-secondary" style="padding:8px 12px;font-size:14px">📞 কল</a>
-        <a href="https://wa.me/${phone}" target="_blank" class="btn btn-primary" style="padding:8px 12px;font-size:14px;background:#25D366">💬 WhatsApp</a>
-      </div>
+      <p>প্রতিনিধি দেখতে ক্লিক করুন →</p>
     </div>`;
   });
-  document.getElementById('wardsContainer').innerHTML = html || '<p>এখনো প্রতিনিধি যোগ হয়নি</p>';
+  document.getElementById('wardListContent').innerHTML = html;
+}
+
+// Step 2: নির্দিষ্ট ওয়ার্ডের প্রতিনিধি দেখানো
+window.showRepPopup = function(wardNo){
+  closePopup('wardListPopup');
+  const wardData = allWards.find(w => w.wardNo == wardNo);
+  if(!wardData) return alert('তথ্য পাওয়া যায়নি');
+  
+  document.getElementById('repPopupTitle').innerText = `ওয়ার্ড ${wardNo} - প্রতিনিধি`;
+  
+  let phone = wardData.mobile.replace(/\D/g,''); 
+  if(phone.startsWith('0')) phone = '88' + phone; 
+  
+  let html = `<div style="text-align:left;font-size:16px;line-height:2">
+    <p><b>প্রতিনিধি:</b> ${wardData.name}</p>
+    <p><b>মোবাইল:</b> ${wardData.mobile}</p>
+    <p><b>ঠিকানা:</b> ৭ নং হাজিরহাট ইউনিয়ন</p>
+    <div style="display:flex;gap:10px;margin-top:15px">
+      <a href="tel:${phone}" class="btn btn-secondary" style="flex:1;text-align:center">📞 কল</a>
+      <a href="https://wa.me/${phone}" target="_blank" class="btn btn-primary" style="flex:1;text-align:center;background:#25D366">💬 WhatsApp</a>
+    </div>
+  </div>`;
+  
+  document.getElementById('repPopupContent').innerHTML = html;
+  document.getElementById('repPopup').style.display = 'flex';
 }
 
 // Hero Settings লোড - base64 সাপোর্ট
@@ -178,14 +250,12 @@ async function loadSettings(){
   const snap = await getDoc(doc(db, "settings", "hero"));
   if(snap.exists()){
     const data = snap.data();
-    if(data.logoUrl) document.getElementById('heroLogo').src = data.logoUrl; // base64
+    if(data.logoUrl) document.getElementById('heroLogo').src = data.logoUrl;
     if(data.name) document.getElementById('heroName').innerText = data.name;
     if(data.slogan) document.getElementById('heroSlogan').innerText = `"${data.slogan}"`;
-    if(data.bannerUrl) document.getElementById('heroSection').style.backgroundImage = `linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),url('${data.bannerUrl}')`; // base64
+    if(data.bannerUrl) document.getElementById('heroSection').style.backgroundImage = `linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),url('${data.bannerUrl}')`;
   }
 }
-
-loadWardsUser();
 loadSettings();
 </script>
 
